@@ -55,5 +55,5 @@ web: \$JBOSS_HOME/wildfly/bin/standalone.sh -b=0.0.0.0 -Djboss.http.port=\$PORT
 EOF
 
 cat << EOF > $BUILD_DIR/.profile.d/jboss.sh
-export JBOSS_HOME=${JBOSS_HOME}/wildfly
+export JBOSS_HOME=${JBOSS_HOME}
 EOF
