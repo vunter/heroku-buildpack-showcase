@@ -20,21 +20,17 @@ curl --retry 3 --silent --location $JVM_COMMON_BUILDPACK | tar xzm -C /tmp/jvm-c
 
 install_java_with_overlay ${BUILD_DIR}
 
-JBOSS_HOME=".jboss/singular-platform-1.1.0/wildfly"
-
+JBOSS_HOME=".jboss/singular-platform-1.1.0"
 cd $BUILD_DIR
 
-mkdir -p .jboss
+mkdir -p ${JBOSS_HOME}
 
 echo -n "-----> Installing Wildfly ... "
 wget https://github.com/opensingular/singular-platform/releases/download/1.1.0/singular-platform-1.1.0.tar.gz
 echo "downloaded"
-ls
-tar -xf singular-platform-1.1.0.tar.gz
+tar -xf singular-platform-1.1.0.tar.gz -C ${JBOSS_HOME}
 ls
 echo "extracted"
-mv singular-platform-1.1.0 .jboss
-echo "moved"
 rm singular-platform-1.1.0.tar.gz
 echo "done"
 
@@ -46,7 +42,7 @@ wget https://repo1.maven.org/maven2/org/opensingular/singular-ui-showcase/1.8.2.
 echo "... done"
 
 echo -n "-----> Deploying war file(s)... "
-cp *.war $JBOSS_HOME/standalone/deployments/
+cp *.war $JBOSS_HOME/wildfly/standalone/deployments/
 echo "done"
 
 echo "-----> Creating configuration..."
@@ -55,9 +51,9 @@ if [ -f $BUILD_DIR/Procfile ]; then
 fi
 
 cat << EOF > $BUILD_DIR/Procfile
-web: \$JBOSS_HOME/bin/standalone.sh -b=0.0.0.0 -Djboss.http.port=\$PORT
+web: \$JBOSS_HOME/wildfly/bin/standalone.sh -b=0.0.0.0 -Djboss.http.port=\$PORT
 EOF
 
 cat << EOF > $BUILD_DIR/.profile.d/jboss.sh
-export JBOSS_HOME=${JBOSS_HOME}
+export JBOSS_HOME=${JBOSS_HOME}/wildfly
 EOF
