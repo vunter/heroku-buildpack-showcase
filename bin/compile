@@ -20,28 +20,31 @@ curl --retry 3 --silent --location $JVM_COMMON_BUILDPACK | tar xzm -C /tmp/jvm-c
 
 install_java_with_overlay ${BUILD_DIR}
 
-WILDFLY_VERSION="10.1.0.Final"
-WILDFLY_SHA1="9ee3c0255e2e6007d502223916cefad2a1a5e333"
-JBOSS_HOME=".jboss/wildfly-${WILDFLY_VERSION}"
+JBOSS_HOME=".jboss/singular-platform-1.1.0/wildfly"
 
 cd $BUILD_DIR
 
 mkdir -p .jboss
 
-echo -n "-----> Installing Wildfly ${WILDFLY_VERSION}... "
-curl -O http://download.jboss.org/wildfly/$WILDFLY_VERSION/wildfly-$WILDFLY_VERSION.tar.gz
+echo -n "-----> Installing Wildfly ... "
+curl -O https://github.com/opensingular/singular-platform/releases/download/1.1.0/singular-platform-1.1.0.tar.gz
 echo "downloaded"
-sha1sum wildfly-$WILDFLY_VERSION.tar.gz | grep $WILDFLY_SHA1 > /dev/null 2>&1
-echo "verified"
-tar xf wildfly-$WILDFLY_VERSION.tar.gz
+tar xf singular-platform-1.1.0.tar.gz
 echo "extracted"
-mv wildfly-$WILDFLY_VERSION $JBOSS_HOME
+mv singular-platform-1.1.0 .jboss
 echo "moved"
-rm wildfly-$WILDFLY_VERSION.tar.gz
+rm singular-platform-1.1.0.tar.gz
 echo "done"
 
+echo -n "-----> Downloading Artifacts..."
+echo "... Static Resources ..."
+curl -o https://repo1.maven.org/maven2/org/opensingular/requirement-sample-static-resources/1.8.2.1/requirement-sample-static-resources-1.8.2.1.war
+echo "... Show Case ..."
+curl -o https://repo1.maven.org/maven2/org/opensingular/singular-ui-showcase/1.8.2.1/singular-ui-showcase-1.8.2.1.war
+echo "... done"
+
 echo -n "-----> Deploying war file(s)... "
-cp target/*.war $JBOSS_HOME/standalone/deployments/
+cp *.war $JBOSS_HOME/standalone/deployments/
 echo "done"
 
 echo "-----> Creating configuration..."
