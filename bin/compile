@@ -29,7 +29,9 @@ mkdir -p .jboss
 echo -n "-----> Installing Wildfly ... "
 curl -O https://github.com/opensingular/singular-platform/releases/download/1.1.0/singular-platform-1.1.0.tar.gz
 echo "downloaded"
-tar xf singular-platform-1.1.0.tar.gz
+ls
+tar -xf singular-platform-1.1.0.tar.gz
+ls
 echo "extracted"
 mv singular-platform-1.1.0 .jboss
 echo "moved"
